@@ -45,6 +45,14 @@ typedef enum
 	//...
 } status_t;
 
+typedef enum
+{
+  LIS3DH_RANGE_16_G         = 0xB8,   // +/- 16g
+  LIS3DH_RANGE_8_G           = 0xA8,   // +/- 8g
+  LIS3DH_RANGE_4_G           = 0x98,   // +/- 4g
+  LIS3DH_RANGE_2_G           = 0x88    // +/- 2g (default value)
+} lis3dh_range_t;
+
 //This is the core operational class of the driver.
 //  LIS3DHCore contains only read and write operations towards the IMU.
 //  To use the higher level functions, use the class LIS3DH which inherits
@@ -153,6 +161,8 @@ public:
 	void fifoEnd( void );
 	
 	float calcAccel( int16_t );
+	void enable_motion_detection( const lis3dh_range_t range, const uint8_t thres );
+
 	
 private:
 
