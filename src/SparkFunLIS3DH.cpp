@@ -781,9 +781,11 @@ void LIS3DH::enable_motion_detection( const lis3dh_range_t range, const uint8_t 
   //dataToWrite |= 0x10; // 16 * 1/50 s = 320ms
   LIS3DH::writeRegister(LIS3DH_TIME_WINDOW, dataToWrite);
 
-  LIS3DH::writeRegister(LIS3DH_CTRL_REG1, 0x47);       // High-pass filter (HPF) enabled for INT1. Autoreset on INT
+  //LIS3DH_CTRL_REG1
+  LIS3DH::writeRegister(LIS3DH_CTRL_REG1, 0x47);
 
-  LIS3DH::writeRegister(LIS3DH_CTRL_REG2, 0xC9);       // High-pass filter (HPF) enabled for INT1. Autoreset on INT
+  //LIS3DH_CTRL_REG2
+  LIS3DH::writeRegister(LIS3DH_CTRL_REG2, 0x00);       // High-pass filter (HPF) disabled for INT1. Autoreset on INT
 
   //LIS3DH_CTRL_REG3
   //Choose source for pin 1
@@ -799,13 +801,15 @@ void LIS3DH::enable_motion_detection( const lis3dh_range_t range, const uint8_t 
   //LIS3DH_CTRL_REG4
   LIS3DH::writeRegister(LIS3DH_CTRL_REG4, range );
 
+
   //LIS3DH_CTRL_REG5
+  dataToWrite = 0;
   //Int1 latch interrupt and 4D on  int1 (preserve fifo en)
-  LIS3DH::readRegister(&dataToWrite, LIS3DH_CTRL_REG5);
-  dataToWrite &= 0xF3; //Clear bits of interest
-  dataToWrite |= 0x08; //Latch interrupt (Cleared by reading int1_src)
+  //LIS3DH::readRegister(&dataToWrite, LIS3DH_CTRL_REG5);
+  //dataToWrite &= 0xF3; //Clear bits of interest
+  //dataToWrite |= 0x08; //Latch interrupt (Cleared by reading int1_src)
   //dataToWrite |= 0x04; //Pipe 4D detection from 6D recognition to int1?
-  LIS3DH::writeRegister(LIS3DH_CTRL_REG5, 0x00);
+  LIS3DH::writeRegister(LIS3DH_CTRL_REG5, dataToWrite);
 
   //LIS3DH_CTRL_REG6
   //Choose source for pin 2 and both pin output inversion state
@@ -819,7 +823,7 @@ void LIS3DH::enable_motion_detection( const lis3dh_range_t range, const uint8_t 
   //LIS3DH_INT1_THS   
   dataToWrite = 0;
   //Provide 7 bit value, 0x7F always equals max range by accelRange setting
-  dataToWrite |= 0x10; // 1/8 range
+  //dataToWrite |= 0x10; // 1/8 range
   LIS3DH::writeRegister(LIS3DH_INT1_THS, thres);
 
   //LIS3DH_INT1_DURATION  
@@ -830,6 +834,7 @@ void LIS3DH::enable_motion_detection( const lis3dh_range_t range, const uint8_t 
   LIS3DH::writeRegister(LIS3DH_INT1_DURATION, dataToWrite);
 
   //LIS3DH_INT1_CFG   
+  dataToWrite = 0;
   dataToWrite |= 0x80;//AOI, 0 = OR 1 = AND
   //dataToWrite |= 0x40;//6D, 0 = interrupt source, 1 = 6 direction source
   //Set these to enable individual axes of generation source (or direction)
@@ -840,5 +845,5 @@ void LIS3DH::enable_motion_detection( const lis3dh_range_t range, const uint8_t 
   //dataToWrite |= 0x04;//Y low
   //dataToWrite |= 0x02;//X high
   //dataToWrite |= 0x01;//X low
-  LIS3DH::writeRegister(LIS3DH_INT1_CFG, 0x2A);
+  LIS3DH::writeRegister(LIS3DH_INT1_CFG, dataToWrite);
 }
