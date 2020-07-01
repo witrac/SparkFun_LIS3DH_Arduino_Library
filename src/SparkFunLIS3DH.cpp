@@ -839,9 +839,9 @@ void LIS3DH::enable_motion_detection( const lis3dh_range_t range, const uint8_t 
   //dataToWrite |= 0x40;//6D, 0 = interrupt source, 1 = 6 direction source
   //Set these to enable individual axes of generation source (or direction)
   // -- high and low are used generically
-  //dataToWrite |= 0x20;//Z high
+  dataToWrite |= 0x20;//Z high
   //dataToWrite |= 0x10;//Z low
-  dataToWrite |= 0x08;//Y high
+  //dataToWrite |= 0x08;//Y high
   //dataToWrite |= 0x04;//Y low
   //dataToWrite |= 0x02;//X high
   //dataToWrite |= 0x01;//X low
